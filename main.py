@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns 
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
+from sklearn.metrics import adjusted_rand_score
 
 
 cols = ["Area","Perimeter","Compactness","Length","Width","Coefficient","Groove","Class"]
@@ -69,5 +70,8 @@ axes[1].set_title("K-Means Cluster")
 axes[1].set_xlabel("Compactness")
 axes[1].set_ylabel("Coefficient")
 
-plt.tight_layout()
-plt.show()
+# plt.tight_layout()
+# plt.show()
+
+ari = adjusted_rand_score(y_true, clusters)
+print("Adjusted Rand Index:", ari)
