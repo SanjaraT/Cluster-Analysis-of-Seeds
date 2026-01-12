@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns 
+from sklearn.preprocessing import StandardScaler
+
 
 cols = ["Area","Perimeter","Compactness","Length","Width","Coefficient","Groove","Class"]
 df = pd.read_csv("seeds_dataset.txt",names = cols, sep = "\s+")
@@ -22,4 +24,12 @@ sns.heatmap(df.drop("Class",axis = 1).corr(),
             cmap= "coolwarm",
             fmt = ".2f")
 plt.title("Correlation Matrix")
-plt.show()
+# plt.show()
+
+X = df.drop("Class", axis = 1)
+y_true = df["Class"]
+
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+df_scaled = pd.DataFrame(X_scaled, columns=X.columns)
+print(df_scaled.head())
