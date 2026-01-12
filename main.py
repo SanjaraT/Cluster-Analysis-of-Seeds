@@ -5,6 +5,7 @@ import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score
+from sklearn.decomposition import PCA
 
 
 cols = ["Area","Perimeter","Compactness","Length","Width","Coefficient","Groove","Class"]
@@ -62,7 +63,7 @@ sns.scatterplot(
     x= "Compactness",
     y="Coefficient",
     hue = "cluster",
-    palette= "Set1",
+    palette= "Set2",
     s = 70,
     ax = axes[1]
 )
@@ -73,5 +74,37 @@ axes[1].set_ylabel("Coefficient")
 # plt.tight_layout()
 # plt.show()
 
-ari = adjusted_rand_score(y_true, clusters)
-print("Adjusted Rand Index:", ari)
+# ari = adjusted_rand_score(y_true, clusters)
+# print("Adjusted Rand Index:", ari)
+
+
+pca = PCA(n_components=2)
+x_pca = pca.fit_transform(X_scaled)
+
+scatter_df = pd.DataFrame(x_pca, columns=["PC1","PC2"])
+scatter_df["Original_Class"]= y_true
+scatter_df["Cluster"] = clusters
+
+fig,axes = plt.subplots(1,2,figsize = (12,15))
+
+sns.scatterplot(
+    data= scatter_df,
+    x="PC1", y="PC2",
+    hue="Original_Class",
+    palette="Set1",
+    s=60,
+    ax= axes[0]
+)
+axes[0].set_title("Original Class")
+
+sns.scatterplot(
+    data= scatter_df,
+    x="PC1", y="PC2",
+    hue="Cluster",
+    palette="Set2",
+    s=60,
+    ax= axes[1]
+)
+axes[1].set_title("KMeans Clusters")
+plt.tight_layout()
+plt.show()
